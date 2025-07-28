@@ -62,7 +62,6 @@ function loadSong(song) {
   artist.textContent = song.artist;
   music.src = `music/${song.name}.mp3`;
   image.src = `img/${song.name}.jpg`;
-  console.log(`now playing: ${song.name}, ${song.displayName}, ${song.artist}`);
 }
 
 // Current Song
@@ -72,7 +71,6 @@ let songIndex = 0;
 function prevSong() {
   if (songIndex > 0) {
     songIndex--;
-    console.log(songIndex);
     loadSong(songs[songIndex]);
     playSong();
   } else {
@@ -104,7 +102,6 @@ function updateProgressBar(e) {
     progress.style.width = `${progressPercent}%`;
     // calculate disply for duration
     const durationMinutes = Math.floor(duration / 60);
-    console.log(durationMinutes);
     // calculate seconds
     let durationSeconds = Math.floor(duration % 60);
     if (durationSeconds < 10) {
@@ -116,7 +113,6 @@ function updateProgressBar(e) {
     }
     // calculate disply for current time
     const currentMinutes = Math.floor(currentTime / 60);
-    console.log(currentMinutes);
     // calculate seconds
     let currentSeconds = Math.floor(currentTime % 60);
     if (currentSeconds < 10) {
@@ -126,7 +122,22 @@ function updateProgressBar(e) {
   }
 }
 
+// Set Progress Bar
+function setProgressBar(e) {
+  console.log(e);
+  const width = this.clientWidth;
+  const clickX = e.offsetX;
+  console.log("Width", width);
+  console.log("clickX", clickX);
+
+  const { duration } = music;
+  console.log(clickX / width);
+  music.currentTime = Math.round((clickX / width) * duration);
+}
+
 // Event Listeners
 prevBtn.addEventListener("click", prevSong);
 nextBtn.addEventListener("click", nextSong);
+music.addEventListener("ended", nextSong);
 music.addEventListener("timeupdate", updateProgressBar);
+progressContainer.addEventListener("click", setProgressBar);
